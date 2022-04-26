@@ -75,7 +75,7 @@ export default Component.extend({
   didUpdateAttrs() {
     this.didInsertElement()
   },
-  
+
   async didInsertElement() {
 
     /*
@@ -326,28 +326,25 @@ export default Component.extend({
   },
 
   cuandoTerminaEjecucion() {
-    run(this, function () {
+    if (this.errorDeActividad) {
+      if (this.onErrorDeActividad) this.onErrorDeActividad(this.errorDeActividad)
+      return;
+    }
 
-      if (this.errorDeActividad) {
-        if (this.onErrorDeActividad) this.onErrorDeActividad(this.errorDeActividad)
-        return;
-      }
+    if (this.onTerminoEjecucion)
+      this.onTerminoEjecucion()
 
-      if (this.onTerminoEjecucion)
-        this.onTerminoEjecucion()
-        
-      if (this.pilasService.estaResueltoElProblema() && this.shouldOpenEndModal) {
-        this.send('abrirFinDesafio')
-      }
+    if (this.pilasService.estaResueltoElProblema() && this.shouldOpenEndModal) {
+      this.send('abrirFinDesafio')
+    }
 
-      if (this.ejecutando) {
-        this.set('ejecutando', false);
-        this.exerciseWorkspace.set('ejecutando', false);
-        this.set('terminoDeEjecutar', true);
-        this.exerciseWorkspace.set('terminoDeEjecutar', true);
-        this.clearHighlight();
-      }
-    });
+    if (this.ejecutando) {
+      this.set('ejecutando', false);
+      this.exerciseWorkspace.set('ejecutando', false);
+      this.set('terminoDeEjecutar', true);
+      this.exerciseWorkspace.set('terminoDeEjecutar', true);
+      this.clearHighlight();
+    }
   },
 
   restaurar_codigo(codigo) {
@@ -408,10 +405,10 @@ export default Component.extend({
 
   showExpectationFeedbackFor(condition, addFeedback) {
     this.get('failedExpects')
-    .filter(condition)
-    .forEach(({ declaration, description }, i) =>
-      addFeedback(declarationWithName(declaration), description, -i)// TODO: Add priority?
-    )
+      .filter(condition)
+      .forEach(({ declaration, description }, i) =>
+        addFeedback(declarationWithName(declaration), description, -i)// TODO: Add priority?
+      )
   },
 
   async runValidations() {
@@ -420,7 +417,7 @@ export default Component.extend({
     this.showExpectationFeedback()
     Blockly.Events.fireRunCode()
   },
-  
+
   javascriptCode() {
     // This should be EmberBlockly's responsibility. 
     // But that component's javascriptCode often won't get updated soon enough and tests will fail. See https://github.com/Program-AR/pilas-bloques/pull/878
