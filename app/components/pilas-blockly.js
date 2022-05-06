@@ -451,7 +451,7 @@ export default Component.extend({
 
       let factory = this.interpreterFactory;
       const sleep = ms => new Promise(r => setTimeout(r, ms));
-      //await sleep(500);
+      await sleep(2000);
       let interprete = factory.crearInterprete(this.javascriptCode(), (bloqueId) => this.highlighter.step(bloqueId));
 
       this.set('pausadoEnBreakpoint', false);
