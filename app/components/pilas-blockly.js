@@ -116,7 +116,7 @@ export default Component.extend({
   /**
    * Adds an id to a block of the XML.
    * This is necessary because the ember-blockly component doesnt update the workspace when the
-   * initial workspace is the same as the previous challenge. 
+   * initial workspace is the same as the previous challenge.
    */
   addRandomIdToWorkspace(workspaceXML) {
     return workspaceXML && (workspaceXML.includes('id=') ?
@@ -187,14 +187,14 @@ export default Component.extend({
    *   custom?: string, // for Blockly Dynamic Categories
    *   blocks?: BlockType[],
    * }
-   * 
-   * 
+   *
+   *
    * type EmberToolbox = EmberToolboxItem[]
    * type EmberToolboxItem = BlockType | EmberSeparator | EmberCategory
    * type BlockType = string
    * type EmberSeparator = {
    *    isSeparator: true // always
-   * } 
+   * }
    * type EmberCategory = {
    *   category?: string, // printable category name
    *   custom?: string, // for Blockly Dynamic Categories
@@ -226,7 +226,7 @@ export default Component.extend({
   /**
    * Depending on the challenge, categories may not be required to be shown.
    * Block types should be shown instead.
-   * 
+   *
    * TODO: Implement style "desplegado"
    */
   _styledToolbox(toolbox) {
@@ -423,7 +423,7 @@ export default Component.extend({
   },
 
   javascriptCode() {
-    // This should be EmberBlockly's responsibility. 
+    // This should be EmberBlockly's responsibility.
     // But that component's javascriptCode often won't get updated soon enough and tests will fail. See https://github.com/Program-AR/pilas-bloques/pull/878
 
 
@@ -451,7 +451,7 @@ export default Component.extend({
 
       let factory = this.interpreterFactory;
       const sleep = ms => new Promise(r => setTimeout(r, ms));
-      await sleep(500);
+      //await sleep(500);
       let interprete = factory.crearInterprete(this.javascriptCode(), (bloqueId) => this.highlighter.step(bloqueId));
 
       this.set('pausadoEnBreakpoint', false);
