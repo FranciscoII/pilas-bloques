@@ -92,7 +92,11 @@ export default Component.extend({
     this.set('blockly_comments', this.get('actividad.puedeComentar'));
     this.set('blockly_disable', this.get('actividad.puedeDesactivar'));
     this.set('blockly_duplicate', this.get('actividad.puedeDuplicar'));
+
+
     this.set('initial_workspace', await this.initialWorkspace())
+    console.log('Settie el initial workspace')
+
 
     // Este es un hook para luego agregar a la interfaz
     // el informe deseado al ocurrir un error.
@@ -316,10 +320,10 @@ export default Component.extend({
           // Llama recursivamente, abriendo thread en cada llamada.
           setTimeout(execInterpreterUntilEnd, 10, interpreter);
         } else {
+          console.log('//// finished ////')
           success({ finished: true });
         }
       };
-
       execInterpreterUntilEnd(interprete);
 
     });
@@ -421,6 +425,10 @@ export default Component.extend({
   javascriptCode() {
     // This should be EmberBlockly's responsibility. 
     // But that component's javascriptCode often won't get updated soon enough and tests will fail. See https://github.com/Program-AR/pilas-bloques/pull/878
+
+
+    //Ember blockly no se esta re rendirzando lo suficientemnete rapido y se lo estamos pidiendo antes. Le estamos pasando el codigo que le tenemos que pasar?
+    console.log('4. Voy a pedirle a blockly el workspace.')
     return Blockly.MyLanguage.workspaceToCode(Blockly.getMainWorkspace())
   },
 
@@ -442,6 +450,8 @@ export default Component.extend({
       }
 
       let factory = this.interpreterFactory;
+      const sleep = ms => new Promise(r => setTimeout(r, ms));
+      await sleep(500);
       let interprete = factory.crearInterprete(this.javascriptCode(), (bloqueId) => this.highlighter.step(bloqueId));
 
       this.set('pausadoEnBreakpoint', false);
@@ -450,8 +460,12 @@ export default Component.extend({
       this.set('ejecutando', true);
       this.exerciseWorkspace.set('ejecutando', true);
 
+      console.log('voy a mandar a ejecutar el interprete')
+      console.time('Interprete')
+      console.log(interprete)
       this.ejecutarInterpreteHastaTerminar(interprete, pasoAPaso)
         .then(executionResult => {
+          console.timeEnd('Interprete')
           this.executionFinishedEvent(analyticsSolutionId, executionResult)
           this.cuandoTerminaEjecucion()
         })
@@ -507,6 +521,7 @@ export default Component.extend({
 
     onNewWorkspace() {
       this.availableBlocksValidator.disableNotAvailableBlocksInWorkspace(this.bloques)
+      console.log(`onNewWorkspace: ${Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace))}`)
     },
   }
 

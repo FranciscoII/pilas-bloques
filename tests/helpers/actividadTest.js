@@ -133,13 +133,17 @@ export function actividadTest(nombre, opciones) {
         // Captura el evento de inicialización de pilas:
 
         this.set('startExecution', () => {
+
+          console.log(`%%% empece el test ${nombre} %%%`)
           if (opciones.cantidadDeActoresAlComenzar) {
             validarCantidadDeActores(opciones.cantidadDeActoresAlComenzar, assert, pilasService);
           }
 
           setTimeout(() => {
+            console.time(nombre)
             jQuery('#turbo-button').click();
             jQuery('#run-button').click();
+            console.log(`hice clicko en ${nombre}`)
           }, 1000);
 
         });
@@ -157,10 +161,13 @@ export function actividadTest(nombre, opciones) {
           } else {
             assert.notOk(`Ocurrió un error inesperado: '${motivoDelError}'`);
           }
+          console.timeEnd(nombre)
+          console.log(`*** Termine el test ${nombre} ***`)
           success();
         });
 
         this.set('onTerminoEjecucion', () => {
+          console.log('estoy en la funcion callback onTerminoEjecucion')
           if (opciones.cantidadDeActoresAlTerminar) {
             validarCantidadDeActores(opciones.cantidadDeActoresAlTerminar, assert, pilasService);
           }
@@ -176,6 +183,8 @@ export function actividadTest(nombre, opciones) {
           } else {
             assert.ok(pilasService.estaResueltoElProblema(), "Se puede resolver el problema");
           }
+          console.timeEnd(nombre)
+          console.log(`*** Termine el test ${nombre} ***`)
           success();
         });
 

@@ -14,6 +14,7 @@ export default Service.extend({
    * en la función _initFunction, que aparece más abajo.
    */
   crearInterprete(codigo, callback_cuando_ejecuta_bloque) {
+
     return new Interpreter(this.wrappearCodigo(codigo), (interpreter, scope) => {
       return this._initFunction(interpreter, scope, callback_cuando_ejecuta_bloque);
     });
@@ -27,7 +28,7 @@ export default Service.extend({
     let pilasService = this.pilas;
     var actor = pilasService.evaluar(`pilas.escena_actual().automata;`);
 
-    var console_log_wrapper = function(txt) {
+    var console_log_wrapper = function (txt) {
       txt = txt ? txt.toString() : '';
       return interpreter.createPrimitive(console.log(txt));
     };
@@ -36,18 +37,18 @@ export default Service.extend({
 
     // Esto deberia estar en otro lado, es un comportamiento que lo unico que
     // hace es llamar a una función.
-    var ComportamientoLlamarCallback = function(args) {
+    var ComportamientoLlamarCallback = function (args) {
       this.argumentos = args;
 
-      this.iniciar = function() {
+      this.iniciar = function () {
       };
 
-      this.actualizar = function() {
+      this.actualizar = function () {
         this.argumentos.callback();
         return true;
       };
 
-      this.eliminar = function() {
+      this.eliminar = function () {
       };
     };
 
@@ -65,7 +66,7 @@ export default Service.extend({
     //
     // Internamente la función hará que el actor primero "salte" y luego
     // "camine" 20 pasos.
-    var hacer_wrapper = function(comportamiento, params, callback) {
+    var hacer_wrapper = function (comportamiento, params, callback) {
       comportamiento = comportamiento ? comportamiento.toString() : '';
       params = params ? params.toString() : '';
       params = JSON.parse(params);
@@ -85,12 +86,12 @@ export default Service.extend({
         comportamiento;
       `);
 
-      if(typeof params.receptor === 'string') {
+      if (typeof params.receptor === 'string') {
         params.receptor = pilasService.evaluar(`pilas.escena_actual().${params.receptor}`);
       }
 
       actor.hacer_luego(clase_comportamiento, params);
-      actor.hacer_luego(ComportamientoLlamarCallback, {callback});
+      actor.hacer_luego(ComportamientoLlamarCallback, { callback });
     };
 
     interpreter.setProperty(scope, 'out_hacer', interpreter.createAsyncFunction(hacer_wrapper));
@@ -123,7 +124,7 @@ export default Service.extend({
     interpreter.setProperty(scope, 'highlightBlock', interpreter.createNativeFunction(out_highlightBlock));
   },
 
-  wrappearCodigo(codigo){
+  wrappearCodigo(codigo) {
     return js_beautify(`
         var actor_id = 'demo'; // se asume el actor receptor de la escena.
 

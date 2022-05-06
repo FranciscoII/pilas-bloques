@@ -190,7 +190,7 @@ export default Component.extend({
 
     async ejecutar(pasoAPaso = false) {
       this.set('areExpectationsRunning', true)
-      later(this, async function() {
+      later(this, async function () {
         await asyncActionCall('ejecutar', this.pilasBlockly, pasoAPaso)
         this.set('areExpectationsRunning', false)
         this.send("showScene");
